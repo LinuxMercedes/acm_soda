@@ -66,7 +66,8 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'acm_soda.urls'
 
 TEMPLATE_DIRS = (
-    '/home/numix/code/acm_soda/templates/',
+    #'/home/numix/code/acm_soda/templates/',
+    '/Users/josheads/code/acm_soda/templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -78,5 +79,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'acm_soda.api',
+    'acm_soda.web',
     'django.contrib.admin'
 )
+
+STATIC_DOC_ROOT = '/Users/josheads/code/acm_soda/media'
+LOGIN_REDIRECT_URL = 'web/profile'
+LOGIN_URL = '/web/login'
