@@ -3,8 +3,8 @@
 {% block content %}
 <!--User Profile-->
 <!-- Pull account balance, purchase history, etc... -->
-{{user}}
-{{request}}
+<h3>{{user.user.first_name}} {{user.user.last_name}} ({{user.user.username}})</h3>
+<p>Balance: {{user.balance}}</p>
 <a href="/web/logout">Logout</a>
 
 {% endblock %}

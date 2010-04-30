@@ -1,35 +1,18 @@
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import logout
+from django.contrib.auth.models import User
+
 from acm_soda.api.models import Inventory, MachineUser
 
 def external(request):
     inventories = Inventory.getEntireInventory()
     return render_to_response('external.html', {'inventories': inventories})
-    
-def login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(user=user, password=password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
-            #Redirect to a success page
-        else:
-            #Return a 'disabled account' page
-            pass
-    else:
-        #Return an 'invalid login' error message
-        pass
         
 @login_required
-def profile(request):
-    try:
-        real_user = User.objects.get(username='request.user')
-        soda_user = MachineUser.objects.get(user=real_user)
-    except:
-        soda_user = None
-        real_user = None
+def profile(request, username):
+    real_user = User.objects.get(username=username)
+    soda_user = MachineUser.objects.get(user=real_user)
     return render_to_response('profile.html', {'user': soda_user, 'request': real_user})
 
 def profile_logout(request):
