@@ -1,22 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import User as AuthUser
 
-# Create your models here.
-
-
 class Client(models.Model):
     auth_key = models.CharField(max_length=200)
     name = models.CharField(max_length=200, primary_key=True)
 
 class MachineUser(models.Model):
     user = models.ForeignKey(AuthUser, primary_key=True)
-    twitter = models.CharField(max_length=25, blank=True, unique=True)
-    student_id = models.CharField(max_length=10, blank=True, unique=True)
+    twitter = models.CharField(max_length=25, blank=True)
+    student_id = models.CharField(max_length=10, blank=True)
+    balance = models.IntegerField(help_text='measured in pennies', default=0)
 
 class Soda(models.Model):
     short_name = models.CharField(max_length=10, unique=True, primary_key=True)
     description = models.CharField(max_length=200)
     cost = models.IntegerField(help_text='measured in pennies (ie, 500 = $5)')
+    disabled = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.description
@@ -58,5 +57,8 @@ class Inventory(models.Model):
     def getInventoryForSoda(soda):
         return Inventory.returnQs(Inventory.objects.select_related(depth=1).filter(pk=soda).all())
 
+    @staticmethod
+    def getInventoryForSlot(slot):
+        return Inventory.returnQs(Inventory.objects.select_related(depth=1).filter(slot=slot).all())
 
 adminable = (Inventory, MachineUser, Soda, Transaction, SodaTransaction, Client)
