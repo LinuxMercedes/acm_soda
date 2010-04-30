@@ -20,13 +20,26 @@ class Soda(models.Model):
     def __unicode__(self):
         return self.description
 
+# The generic transaction model.  Subclass this to model any action that exchanges
+# currency between a user's account
 class Transaction(models.Model):
     amount = models.IntegerField(help_text='measured in pennies (ie, 500 = $5)')
     user = models.ForeignKey(MachineUser)
     date_time = models.DateTimeField(auto_now_add=True)
+    description = models.CharField(max_length=200)
+    
+    class Meta:
+        abstract = True
+        ordering = ['-date_time']
 
-class SodaTransaction(models.Model):
-    transaction = models.ForeignKey(Transaction, primary_key=True)
+# A subclass of Transaction, used to model administrative deposits and withdrawls
+# from a user's account (adding money to account or cashing out)
+class AdminTransaction(Transaction):
+    admin_user = models.ForeignKey(AuthUser)
+
+
+# A subclass of Transaction, used to model a user purchasing a soda
+class SodaTransaction(Transaction):
     soda = models.ForeignKey(Soda)
 
 class Inventory(models.Model):

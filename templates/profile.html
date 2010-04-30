@@ -5,7 +5,17 @@
 <!-- Pull account balance, purchase history, etc... -->
 <h3>{{user.user.first_name}} {{user.user.last_name}} ({{user.user.username}})</h3>
 {% if current_user %}
-    <p>Balance: {{user.balance}}</p>
+    <p>Balance: ${{printable_balance|floatformat:2}}</p>
+    <h4>Transaction List</h4>
+    {% if transactions %}
+        {% for transaction in transactions %}
+            <p>{{transaction.date_time|date:"fA M d, Y"}}: {{transaction.description}} , {{transaction.amount}}</p>
+        {% endfor %}
+    {% else %}
+        <p>No transactions found in your history.</p>
+    {% endif %}
+{% else %}
+    <!-- No private information shown if we're not this user! -->
 {% endif %}
 <a href="/web/logout">Logout</a>
 
