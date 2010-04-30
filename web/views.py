@@ -10,10 +10,23 @@ def external(request):
     return render_to_response('external.html', {'inventories': inventories})
         
 @login_required
-def profile(request, username):
-    real_user = User.objects.get(username=username)
+def profile(request, username=''):
+    # If no username was present in URL, load current user's profile
+    if username == '':
+        username = request.user.username
+        real_user = request.user
+    # Otherwise, load the profile of whichever user was listed
+    else:
+        real_user = User.objects.get(username=username)
+        
+    # If the currently logged in user is viewing his own page, show personal data
+    if real_user == request.user:
+        current_user = True
+    else:
+        current_user = False
+        
     soda_user = MachineUser.objects.get(user=real_user)
-    return render_to_response('profile.html', {'user': soda_user, 'request': real_user})
+    return render_to_response('profile.html', {'user': soda_user, 'current_user': current_user})
 
 def profile_logout(request):
     return logout(request, '/web')

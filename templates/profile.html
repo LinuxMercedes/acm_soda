@@ -4,7 +4,9 @@
 <!--User Profile-->
 <!-- Pull account balance, purchase history, etc... -->
 <h3>{{user.user.first_name}} {{user.user.last_name}} ({{user.user.username}})</h3>
-<p>Balance: {{user.balance}}</p>
+{% if current_user %}
+    <p>Balance: {{user.balance}}</p>
+{% endif %}
 <a href="/web/logout">Logout</a>
 
 {% endblock %}
