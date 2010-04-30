@@ -6,7 +6,22 @@ from acm_soda.api.models import Inventory, MachineUser
 def external(request):
     inventories = Inventory.getEntireInventory()
     return render_to_response('external.html', {'inventories': inventories})
-
+    
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(user=user, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            #Redirect to a success page
+        else:
+            #Return a 'disabled account' page
+            pass
+    else:
+        #Return an 'invalid login' error message
+        pass
+        
 @login_required
 def profile(request):
     try:
