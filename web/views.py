@@ -7,7 +7,8 @@ from acm_soda.api.models import *
 
 def external(request):
     inventories = Inventory.getEntireInventory()
-    return render_to_response('external.html', {'inventories': inventories})
+    return render_to_response('external.html', {'request': request,
+                                'inventories': inventories})
         
 @login_required
 def profile(request, username=''):

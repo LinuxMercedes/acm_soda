@@ -2,22 +2,26 @@
 {% block title %}Missouri S&amp;T ACM Soda{% endblock %}
 {% block content %}
 
-<!--Inventory & other status info-->
-<div id="external_status">
-  <h1>Soda Machine Status</h1>
-  <h2>Inventory</h2>
-  <table>
-    <th>Soda Name</th><th>Quantity Available</th>
-    {% for inventory in inventories %}
-    <tr><td>{{inventory.soda.description}}</td><td>{{inventory.quantity}}</td></tr>
-    {% endfor %}
-  </table>
-  
-  <h2>Server Status</h2>
-  <!-- TODO: Loop through server stats and print out (uptime, sodas vended?, etc..)-->
-  <p>Uptime: x sec</p>
-  
-  <a class="login" href="/web/login/">Login</a>
-</div>
+    <!--Inventory & other status info-->
+    <div id="external_status">
+    <h1>Soda Machine Status</h1>
+    <h2>Inventory</h2>
+    <table>
+        <th>Soda Name</th><th>Quantity Available</th>
+        {% for inventory in inventories %}
+            <tr><td>{{inventory.soda.description}}</td><td>{{inventory.quantity}}</td></tr>
+        {% endfor %}
+    </table>
+
+    <h2>Server Status</h2>
+    <!-- TODO: Loop through server stats and print out (uptime, sodas vended?, etc..)-->
+    <p>Uptime: x sec</p>
+
+    {% if request.user %}
+        <a href="/web/profile/">Your Profile</a>
+    {% else %}
+        <a class="login" href="/web/login/">Login</a>
+    {% endif %}
+    </div>
 
 {% endblock %}

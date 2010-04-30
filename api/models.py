@@ -10,6 +10,9 @@ class MachineUser(models.Model):
     twitter = models.CharField(max_length=25, blank=True)
     student_id = models.CharField(max_length=10, blank=True)
     balance = models.IntegerField(help_text='measured in pennies', default=0)
+    
+    def __unicode__(self):
+        return self.user.username
 
 class Soda(models.Model):
     short_name = models.CharField(max_length=10, unique=True, primary_key=True)
@@ -36,11 +39,23 @@ class Transaction(models.Model):
 # from a user's account (adding money to account or cashing out)
 class AdminTransaction(Transaction):
     admin_user = models.ForeignKey(AuthUser)
-
+    
 
 # A subclass of Transaction, used to model a user purchasing a soda
 class SodaTransaction(Transaction):
     soda = models.ForeignKey(Soda)
+    
+    #enforce amount == soda cost
+    def save(self, *args, **kwargs):
+        if self.amount != self.soda.cost:
+            raise Exception("Transaction amount must match soda cost!") #TODO: throw an error or something
+        else:
+            super(SodaTransaction, self).save(*args, **kwargs)
+    
+    def __unicode__(self):
+        return "%s, %s, %s" % (self.user.user.username, 
+                                self.date_time.strftime('%H:%M:%S - %B %d, %Y'), 
+                                self.soda.short_name)
 
 class Inventory(models.Model):
     soda = models.ForeignKey(Soda, primary_key=True)
