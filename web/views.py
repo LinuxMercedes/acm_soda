@@ -1,9 +1,12 @@
+from datetime import datetime
+
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import logout
 from django.contrib.auth.models import User
 
 from acm_soda.api.models import *
+from acm_soda.settings import SODA_FIFO
 
 def external(request):
     inventories = Inventory.getEntireInventory()
@@ -50,21 +53,45 @@ def purchase(request): #TODO: Add exception handling!
     soda = None
     success = False
     
-    if request.method == 'POST':
+    if request.method == 'GET':
         pass #TODO: print out error message
-    elif request.method == 'GET':
-        soda_name = request.GET['soda']
+    elif request.method == 'POST':
+        #TODO: generate a purchase hash prior to submitting the form and check
+        #that it matches w/ the GET request (send hash w/ form).  This will
+        #give a unique purchase URL for each purchase to avoid accidental
+        #or spamming purchases
+        soda_name = request.POST['soda']
         soda = Soda.objects.get(short_name=soda_name)
     
-    # Check that the user has enough money for the purchase
-    machine_user = MachineUser.objects.get(user=request.user)
-    if machine_user.balance > soda.cost:
-        machine_user.balance -= soda.cost
-        avail_soda = Inventory.objects.filter(soda=soda)
-        #vend_soda(avail_soda[0].slot)
-        success = True
+        # Check that the user has enough money for the purchase
+        machine_user = MachineUser.objects.get(user=request.user)
+        if machine_user.balance > soda.cost:
+            try:
+                avail_soda = Inventory.objects.filter(soda=soda)
+                vend_soda(avail_soda[0].slot)
+            except Exception as e:
+                print e
+                #TODO: figure out a better way to bail out
+                raise Exception('Error trying to purchase a soda!')
+            
+            # Don't record the transaction and deduct the account until everything else works
+            purchase_trans = SodaTransaction(user=machine_user, amount=soda.cost,
+                date_time=datetime.now(), description="Purchased a %s" % (soda.short_name),
+                soda=soda)
+            purchase_trans.save()
+            machine_user.balance -= soda.cost
+            machine_user.save()
+            success = True
     return render_to_response('purchase.html', {'request': request,
         'soda': soda, 'success': success})
+
+def vend_soda(slot_number):
+    if slot_number >= 0 and slot_number <= 7:
+        fifo = open(SODA_FIFO, 'w')
+        fifo.write('%s' % slot_number)
+        fifo.close()
+    else:
+        raise Exception('Invalid Soda Slot Number!')
 
 def profile_logout(request):
     return logout(request, '/web')

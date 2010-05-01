@@ -7,7 +7,7 @@
 {% if current_user %}
     <p>Balance: ${{printable_balance|floatformat:2}}</p>
     <h4>Vending</h4>
-    <form action="/web/purchase/" method="get">
+    <form action="/web/purchase/" method="post">
         <p>Purchase Soda: 
             <select name="soda">
                 {% for soda in available_sodas %}
@@ -28,6 +28,5 @@
 {% else %}
     <!-- No private information shown if we're not this user! -->
 {% endif %}
-<a href="/web/logout">Logout</a>
 
 {% endblock %}
