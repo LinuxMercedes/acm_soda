@@ -1,4 +1,5 @@
 # Django settings for acm_soda project.
+import socket
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -86,3 +87,10 @@ INSTALLED_APPS = (
 STATIC_DOC_ROOT = '/Users/josheads/code/acm_soda/media'
 LOGIN_REDIRECT_URL = 'web/profile'
 LOGIN_URL = '/web/login'
+
+# Override these settings w/ production settings if on the Soda Server
+if socket.gethostname() == 'acmsoda':
+    try:
+        from production_settings import *
+    except ImportError, exp:
+        pass
