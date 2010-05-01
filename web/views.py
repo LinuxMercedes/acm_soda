@@ -29,17 +29,21 @@ def profile(request, username=''):
     soda_user = MachineUser.objects.get(user=real_user)
     printable_balance = soda_user.balance/100.0
     
-    # Grab all admin transactions
+    # Grab all soda transactions
     try:
         transactions = SodaTransaction.objects.filter(user=real_user)
     except:
         transactions = None
         
-    # Grab all soda transactions
+    # Grab all admin transactions
+    #TODO
+    
+    # Grab all available sodas
+    available_sodas = Soda.objects.all()
     
     return render_to_response('profile.html', {'user': soda_user, 
         'current_user': current_user, 'printable_balance': printable_balance,
-        'transactions': transactions})
+        'transactions': transactions, 'available_sodas': available_sodas})
 
 def profile_logout(request):
     return logout(request, '/web')

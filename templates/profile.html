@@ -6,6 +6,17 @@
 <h3>{{user.user.first_name}} {{user.user.last_name}} ({{user.user.username}})</h3>
 {% if current_user %}
     <p>Balance: ${{printable_balance|floatformat:2}}</p>
+    <h4>Vending</h4>
+    <form action="/web/purchase/" method="get">
+        <p>Purchase Soda: 
+            <select>
+                {% for soda in available_sodas %}
+                    <option>{{soda.description}} - {{soda.cost}}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <input type="submit" value="Submit" />
+    </form>
     <h4>Transaction List</h4>
     {% if transactions %}
         {% for transaction in transactions %}
