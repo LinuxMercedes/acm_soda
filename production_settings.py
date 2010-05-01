@@ -5,16 +5,26 @@ TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('Josh Bohde', 'josh.bohde@gmail.com'),
+    ('Josh Eads', 'eads.josh@gmail.com'),
 )
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+''' !!! DEVELOPMENT SETTINGS ONLY !!! '''
+''' DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'acm_soda'             # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3. '''
+
+# Production Server Settings
+DATABASE_ENGINE = 'postgresql'
+DATABASE_NAME = 'acm_soda'
+DATABASE_USER = 'soda'
+DATABASE_PASSWORD = 'sodasoda'
+DATABASE_HOST = ''
+DATABASE_PORT = ''
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -35,17 +45,17 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = '/var/www/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = 'http://localhost/media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/media/admin/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'hc)0=ded!zn_kebxvuzy$ll-mooon!8b)yf67xz@=#43@(an6a'
@@ -66,8 +76,8 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'acm_soda.urls'
 
 TEMPLATE_DIRS = (
-    #'/home/numix/code/acm_soda/templates/',
-    '/Users/josheads/code/acm_soda/templates',
+    #'/Users/josheads/code/acm_soda/templates',
+    '/var/www/acm_soda/templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -83,6 +93,8 @@ INSTALLED_APPS = (
     'django.contrib.admin'
 )
 
-STATIC_DOC_ROOT = '/Users/josheads/code/acm_soda/media'
+# Only for DEV SERVER
+#STATIC_DOC_ROOT = '/Users/josheads/code/acm_soda/media'
+
 LOGIN_REDIRECT_URL = 'web/profile'
 LOGIN_URL = '/web/login'

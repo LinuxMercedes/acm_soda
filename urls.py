@@ -8,5 +8,5 @@ urlpatterns = patterns('',
     (r'^api/', include('acm_soda.api.urls')),
     
     #Admin page
-    (r'^admin/', include(admin.site.urls)),
+    (r'^admin/(.*)', admin.site.root),
 )
