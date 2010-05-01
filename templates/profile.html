@@ -9,9 +9,9 @@
     <h4>Vending</h4>
     <form action="/web/purchase/" method="get">
         <p>Purchase Soda: 
-            <select>
+            <select name="soda">
                 {% for soda in available_sodas %}
-                    <option>{{soda.description}} - {{soda.cost}}</option>
+                    <option value={{soda.short_name}}>{{soda.description}} - {{soda.cost}}</option>
                 {% endfor %}
             </select>
         </p>

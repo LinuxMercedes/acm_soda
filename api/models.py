@@ -58,9 +58,15 @@ class SodaTransaction(Transaction):
                                 self.soda.short_name)
 
 class Inventory(models.Model):
-    soda = models.ForeignKey(Soda, primary_key=True)
-    slot = models.PositiveSmallIntegerField()
+    soda = models.ForeignKey(Soda)
+    slot = models.PositiveSmallIntegerField(primary_key=True)
     amount = models.PositiveSmallIntegerField()
+    
+    class Meta:
+        ordering = ['slot']
+    
+    def __unicode__(self):
+        return "Slot %d: %d units of %s" % (self.slot, self.amount, self.soda.short_name)
 
     @staticmethod
     def returnQs(qs):

@@ -45,5 +45,26 @@ def profile(request, username=''):
         'current_user': current_user, 'printable_balance': printable_balance,
         'transactions': transactions, 'available_sodas': available_sodas})
 
+@login_required
+def purchase(request): #TODO: Add exception handling!
+    soda = None
+    success = False
+    
+    if request.method == 'POST':
+        pass #TODO: print out error message
+    elif request.method == 'GET':
+        soda_name = request.GET['soda']
+        soda = Soda.objects.get(short_name=soda_name)
+    
+    # Check that the user has enough money for the purchase
+    machine_user = MachineUser.objects.get(user=request.user)
+    if machine_user.balance > soda.cost:
+        machine_user.balance -= soda.cost
+        avail_soda = Inventory.objects.filter(soda=soda)
+        #vend_soda(avail_soda[0].slot)
+        success = True
+    return render_to_response('purchase.html', {'request': request,
+        'soda': soda, 'success': success})
+
 def profile_logout(request):
     return logout(request, '/web')
