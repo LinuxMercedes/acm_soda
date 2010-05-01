@@ -69,7 +69,7 @@ def purchase(request): #TODO: Add exception handling!
             try:
                 avail_soda = Inventory.objects.filter(soda=soda)
                 vend_soda(avail_soda[0].slot)
-            except Exception as e:
+            except Exception, e:
                 print e
                 #TODO: figure out a better way to bail out
                 raise Exception('Error trying to purchase a soda!')
