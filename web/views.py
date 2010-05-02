@@ -6,7 +6,7 @@ from django.contrib.auth.views import logout
 from django.contrib.auth.models import User
 
 from acm_soda.api.models import *
-from acm_soda.settings import SODA_FIFO
+from acm_soda.settings import SODA_FIFO_IN, SODA_FIFO_OUT
 
 def external(request):
     inventories = Inventory.getEntireInventory()
@@ -66,13 +66,9 @@ def purchase(request): #TODO: Add exception handling!
         # Check that the user has enough money for the purchase
         machine_user = MachineUser.objects.get(user=request.user)
         if machine_user.balance > soda.cost:
-            try:
-                avail_soda = Inventory.objects.filter(soda=soda)
-                vend_soda(avail_soda[0].slot)
-            except Exception, e:
-                print e
-                #TODO: figure out a better way to bail out
-                raise Exception('Error trying to purchase a soda!')
+            avail_soda = Inventory.objects.filter(soda=soda)
+            vend_soda(avail_soda[0].slot)
+            #TODO: figure out a better way to bail out
             
             # Don't record the transaction and deduct the account until everything else works
             purchase_trans = SodaTransaction(user=machine_user, amount=soda.cost,
@@ -86,12 +82,22 @@ def purchase(request): #TODO: Add exception handling!
         'soda': soda, 'success': success})
 
 def vend_soda(slot_number):
+    #Tell controller to vend
     if slot_number >= 0 and slot_number <= 7:
-        fifo = open(SODA_FIFO, 'w')
+        fifo = open(SODA_FIFO_IN, 'w')
         fifo.write('%s' % slot_number)
         fifo.close()
     else:
         raise Exception('Invalid Soda Slot Number!')
+
+    # Check w/ the controller that there was success
+    fifo = open(SODA_FIFO_OUT, 'r')
+    output = fifo.read(1)
+    if int(output) == 0:
+        fifo.close()
+        raise Exception('Controller failed to vend!')
+    else:
+        fifo.close()
 
 def profile_logout(request):
     return logout(request, '/web')

@@ -4,7 +4,8 @@ import socket
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-SODA_FIFO = '/tmp/vendsodafifo'
+SODA_FIFO_IN = '/tmp/vendsodain'
+SODA_FIFO_OUT = '/tmp/vendsodaout'
 
 ADMINS = (
     ('Josh Bohde', 'josh.bohde@gmail.com'),
