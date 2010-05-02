@@ -17,11 +17,6 @@
     <!-- TODO: Loop through server stats and print out (uptime, sodas vended?, etc..)-->
     <p>Uptime: x sec</p>
 
-    {% if request.user %}
-        <a href="/web/profile/">Your Profile</a>
-    {% else %}
-        <a class="login" href="/web/login/">Login</a>
-    {% endif %}
     </div>
 
 {% endblock %}

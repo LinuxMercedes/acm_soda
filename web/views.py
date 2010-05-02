@@ -44,7 +44,7 @@ def profile(request, username=''):
     # Grab all available sodas
     available_sodas = Soda.objects.all()
     
-    return render_to_response('profile.html', {'user': soda_user, 
+    return render_to_response('profile.html', {'request': request, 'user': soda_user, 
         'current_user': current_user, 'printable_balance': printable_balance,
         'transactions': transactions, 'available_sodas': available_sodas})
 
@@ -72,7 +72,7 @@ def purchase(request): #TODO: Add exception handling!
             
             # Don't record the transaction and deduct the account until everything else works
             purchase_trans = SodaTransaction(user=machine_user, amount=soda.cost,
-                date_time=datetime.now(), description="Purchased a %s" % (soda.short_name),
+                date_time=datetime.now(), description="Purchased a %s" % (soda.description),
                 soda=soda)
             purchase_trans.save()
             avail_soda.amount -= 1

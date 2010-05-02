@@ -8,6 +8,11 @@
     <h1><a href="/">Missouri S&amp;T ACM Soda Machine</a></h1>
   </div>
   {% block content %}{% endblock %}
-  <a href="/web/logout">Logout</a>
+  {% if request.user %}
+      <p>Hello <a href="/web/profile/">{{request.user.username}}</a></p>
+      <p><a href="/web/logout">Logout</a></p>
+  {% else %}
+      <p><a class="login" href="/web/login/">Login</a></p>
+  {% endif %}
 </body>
 </html>
