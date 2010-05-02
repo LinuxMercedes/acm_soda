@@ -95,11 +95,11 @@ def vend_soda(slot_number):
     # Check w/ the controller that there was success
     fifo = open(SODA_FIFO_OUT, 'r')
     output = fifo.read(1)
-    if int(output) == 0:
+    if int(output) == 1:
         fifo.close()
-        raise Exception('Controller failed to vend!')
     else:
         fifo.close()
+        raise Exception('Controller failed to vend!')
 
 def profile_logout(request):
     return logout(request, '/web')
