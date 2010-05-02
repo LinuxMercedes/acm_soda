@@ -4,8 +4,8 @@
 
     <!--Inventory & other status info-->
     <div id="external_status">
-    <h1>Soda Machine Status</h1>
-    <h2>Inventory</h2>
+    <h2>Soda Machine Status</h1>
+    <h3>Inventory</h2>
     <table>
         <th>Soda Name</th><th>Quantity Available</th>
         {% for inventory in inventories %}
@@ -13,7 +13,7 @@
         {% endfor %}
     </table>
 
-    <h2>Server Status</h2>
+    <h3>Server Status</h2>
     <!-- TODO: Loop through server stats and print out (uptime, sodas vended?, etc..)-->
     <p>Uptime: x sec</p>
 

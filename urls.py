@@ -9,4 +9,8 @@ urlpatterns = patterns('',
     
     #Admin page
     (r'^admin/(.*)', admin.site.root),
+    
+    #dev server media
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve', 
+        {'document_root': '/Users/josheads/code/acm_soda/media/'}),
 )
