@@ -75,7 +75,7 @@ def purchase(request): #TODO: Add exception handling!
                 date_time=datetime.now(), description="Purchased a %s" % (soda.description),
                 soda=soda)
             purchase_trans.save()
-            avail_soda.amount -= 1
+            avail_soda.soda.amount -= 1
             avail_soda.save()
             machine_user.balance -= soda.cost
             machine_user.save()
