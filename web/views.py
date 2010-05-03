@@ -42,7 +42,11 @@ def profile(request, username=''):
     #TODO
     
     # Grab all available sodas
-    available_sodas = Soda.objects.all()
+    #TODO: There is probably a way to do this w/ a Django model query
+    available_inv = Inventory.objects.filter(amount__gte=1)
+    available_sodas = []
+    for inventory in available_inv:
+        available_sodas.append(inventory.soda)
     
     return render_to_response('profile.html', {'request': request, 'user': soda_user, 
         'current_user': current_user, 'printable_balance': printable_balance,
@@ -75,7 +79,7 @@ def purchase(request): #TODO: Add exception handling!
                 date_time=datetime.now(), description="Purchased a %s" % (soda.description),
                 soda=soda)
             purchase_trans.save()
-            avail_soda.soda.amount -= 1
+            avail_soda.amount -= 1
             avail_soda.save()
             machine_user.balance -= soda.cost
             machine_user.save()
