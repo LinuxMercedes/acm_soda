@@ -69,7 +69,7 @@ def purchase(request): #TODO: Add exception handling!
     
         # Check that the user has enough money for the purchase
         machine_user = MachineUser.objects.get(user=request.user)
-        if machine_user.balance > soda.cost:
+        if machine_user.balance >= soda.cost:
             avail_soda = Inventory.objects.filter(soda=soda, amount__gte=1)[0]
             vend_soda(avail_soda.slot)
             #TODO: figure out a better way to bail out
